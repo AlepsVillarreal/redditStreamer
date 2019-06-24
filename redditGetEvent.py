@@ -3,6 +3,7 @@ import praw
 import pandas as pd
 from datetime import datetime
 import pprint
+from collections import Counter
 import re
 from credentials import redditPersonalUseID, redditSecretKey, redditAppName, redditUserName, redditPassword
 import matplotlib.pyplot as plt
@@ -52,7 +53,21 @@ for comment in subrList[0].stream.comments():
 				comment_dict["original"].append(original)
 				comment_dict["body"].append(comment.body)
 				comment_df = pd.DataFrame.from_dict(comment_dict)
-				print(comment_df['body'])
+				#Split the text of body in different characters in a list
+				splittedWordsDf = comment_df['body'].str.lower().str.split()
+				for word in splittedWordsDf:
+					print (Counter(word))
+				
+				#print(splittedWordsDf)
+				#print(type(splittedWordsDf))
+				#print(splittedWordsDf.describe())
+				#print(splittedWordsDf)
+				#Get the distinct words
+				results = set()
+				print(splittedWordsDf.str.lower().str.split().apply(results.update))
+				#splittedWordsDf.str.lower().str.split().apply(results.update)
+				#splittedWordsDf['body'].split().apply(results.update)
+				#print(results)
 				#wordInComment = (comment.body).split(" ")
 				#dictOfComment = dict.fromkeys(wordInComment, 0)
 				#amloMentions.update(dictOfComment)
@@ -67,7 +82,20 @@ for comment in subrList[0].stream.comments():
 		print (e)
 		pass
 
+#
+def tokenize(text):
+	try:
+		for row in text:
+			for i in row:
+				if i is not None:
+					words = i.lower().split()
+					return words
+				else:
+					return None
 
+	except Exception as e:
+		print(e)
+		pass
 
 ##Create a dataframe from the dictionary
 #df = pd.DataFrame(comment_dict)
