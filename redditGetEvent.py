@@ -63,8 +63,8 @@ for comment in subrList[0].stream.comments():
 				#print(splittedWordsDf.describe())
 				#print(splittedWordsDf)
 				#Get the distinct words
-				results = set()
-				print(splittedWordsDf.str.lower().str.split().apply(results.update))
+				#results = set()
+				#print(splittedWordsDf.str.lower().str.split().apply(results.update))
 				#splittedWordsDf.str.lower().str.split().apply(results.update)
 				#splittedWordsDf['body'].split().apply(results.update)
 				#print(results)
