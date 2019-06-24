@@ -43,25 +43,26 @@ for comment in subrList[0].stream.comments():
 	try:
 		#print (comment.body)
 		if len(comment.body) > 0:
-			#print(comment.body)
-			parent_id = str(comment.parent())
-			original = reddit.comment(parent_id)
-			comment_dict["parent_id"].append(str(comment.parent()))
-			comment_dict["original"].append(original)
-			comment_dict["body"].append(comment.body)
 			if re.search(patternToLookFor, comment.body):
 				print('found an amlo')
-				print(comment.body)
-				wordInComment = (comment.body).split(" ")
-				dictOfComment = dict.fromkeys(wordInComment, 0)
-				amloMentions.update(dictOfComment)
-				for i in range(len(wordInComment)):
-					if "#" not in wordInComment[i]:
-						amloMentions[wordInComment[i]] += 1
-						df = pd.DataFrame(amloMentions, index = [0])
-						print(df.head())
-						#amloMentionsDf.append(df)
-						#print(amloMentionsDf.head())
+				#print(comment.body)
+				parent_id = str(comment.parent())
+				original = reddit.comment(parent_id)
+				comment_dict["parent_id"].append(str(comment.parent()))
+				comment_dict["original"].append(original)
+				comment_dict["body"].append(comment.body)
+				comment_df = pd.DataFrame.from_dict(comment_dict)
+				print(comment_df['body'])
+				#wordInComment = (comment.body).split(" ")
+				#dictOfComment = dict.fromkeys(wordInComment, 0)
+				#amloMentions.update(dictOfComment)
+				#for i in range(len(wordInComment)):
+		#	if "#" not in wordInComment[i]:
+		#		amloMentions[wordInComment[i]] += 1
+		#		df = pd.DataFrame(amloMentions, index = [0])
+		#		print(df.head())
+		#		#amloMentionsDf.append(df)
+		#		#print(amloMentionsDf.head())
 	except praw.exceptions.PRAWException as e:
 		print (e)
 		pass
@@ -69,9 +70,9 @@ for comment in subrList[0].stream.comments():
 
 
 ##Create a dataframe from the dictionary
-df = pd.DataFrame(comment_dict)
-print(df.describe())
-print(df.info())
+#df = pd.DataFrame(comment_dict)
+#print(df.describe())
+#print(df.info())
 #print(df.head())
 
 #for comment in subrList[0].stream.comments():
