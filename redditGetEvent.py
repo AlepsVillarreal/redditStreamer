@@ -25,6 +25,9 @@ class streamComments(object):
 		self.redditAppName = userAgent
 		self.redditUserName = personalUserName
 		self.redditPassword = personalPassword
+		self.counterFileName = 'example.csv'
+
+
 		try:
 			#Create a praw reddit object
 			reddit = praw.Reddit(client_id=self.redditPersonalUseID, 
@@ -34,7 +37,7 @@ class streamComments(object):
 								password=self.redditPassword)
 
 			#Subreddits to analyze
-			sourceData = ['mexico']
+			sourceData = ['OnePiece']
 
 			#Create a list that holds subreddit objects from sourceData
 			subrList=[]
@@ -51,14 +54,13 @@ class streamComments(object):
 							"counter":[]
 							}
 
-			print ('did it get here?')
 			#final amlo mentions DF
 			#amloMentionsDf = pd.DataFrame(comment_dict)
 			wordCounterDf = pd.DataFrame(wordCounterDf)
 			counterDataFrameColumns = ['word', "counter"]
 
 			#Create a regex object to look for any mention of amlo
-			patternToLookFor = re.compile('amlo', re.IGNORECASE)
+			patternToLookFor = re.compile('hi', re.IGNORECASE)
 			for comment in subrList[0].stream.comments():
 				try:
 					#print (comment.body)
@@ -79,6 +81,9 @@ class streamComments(object):
 								#Now to create the dataFrame that holds the count itself
 								counterDataFrame = pd.DataFrame.from_dict(Counter(word), orient='index').reset_index()
 								counterDataFrame.columns = counterDataFrameColumns
+								print(counterDataFrame.head())
+								with open(self.counterFileName, 'a') as f:
+								    counterDataFrame.to_csv(f,  sep='\t', encoding='utf-8')
 							#print(counterDataFrame)
 							
 							#Appending to global wordCounterDf
@@ -86,7 +91,7 @@ class streamComments(object):
 							
 							#Convert to CSV file
 							#wordCounterDf.to_csv(sep=" ")
-							print(wordCounterDf.head())
+							#print(wordCounterDf.head())
 							#print(splittedWordsDf)
 							#print(type(splittedWordsDf))
 							#print(splittedWordsDf.describe())
