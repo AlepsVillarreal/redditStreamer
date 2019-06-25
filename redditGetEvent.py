@@ -31,15 +31,15 @@ comment_dict = { "parent_id":[],
               "body":[],
             }
 
-#commentOutput
-amloMentions = {}
+
 
 #final amlo mentions DF
 amloMentionsDf = pd.DataFrame(comment_dict)
 
+
+
 #Create a regex object to look for any mention of amlo
 patternToLookFor = re.compile('amlo', re.IGNORECASE)
-
 for comment in subrList[0].stream.comments():
 	try:
 		#print (comment.body)
@@ -53,11 +53,14 @@ for comment in subrList[0].stream.comments():
 				comment_dict["original"].append(original)
 				comment_dict["body"].append(comment.body)
 				comment_df = pd.DataFrame.from_dict(comment_dict)
-				#Split the text of body in different characters in a list
+				#Split the text of message body in different words in a list
 				splittedWordsDf = comment_df['body'].str.lower().str.split()
 				for word in splittedWordsDf:
-					print (Counter(word))
-				
+					#print (Counter(word))
+					#Now to create the dataFrame that holds the count itself
+					counterDataFrame = pd.DataFrame.from_dict(Counter(word), orient='index').reset_index()
+				print(counterDataFrame.head())
+
 				#print(splittedWordsDf)
 				#print(type(splittedWordsDf))
 				#print(splittedWordsDf.describe())
