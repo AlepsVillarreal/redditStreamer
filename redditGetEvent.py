@@ -11,6 +11,14 @@ import seaborn as sns
 
 #30 api calls per minute
 
+"""
+TODO
+1.Refactor in OOP way
+2.Clean incoming data from non alphabetical or numerical characters, such as [], #, !, /, etc
+3. Stream to a localFile.txt the dataframe of wordCounterDF
+4. #In another script, create a program to read the localFile.txt into a dataframe and then use wordcloud library to plot
+"""
+
 #Create a praw reddit object
 reddit = praw.Reddit(client_id=redditPersonalUseID, 
                      client_secret=redditSecretKey, 
@@ -26,6 +34,7 @@ subrList=[]
 for subr in sourceData:
 	subrList.append(reddit.subreddit(subr))
 
+#Create dataframe skeletons for for the text itself and another one for the most repeated word and its counter
 comment_dict = { "parent_id":[],
               "original":[],
               "body":[],
