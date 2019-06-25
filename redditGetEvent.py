@@ -31,12 +31,14 @@ comment_dict = { "parent_id":[],
               "body":[],
             }
 
-
+wordCounterDf = {"word":[],
+				"counter":[]
+				}
 
 #final amlo mentions DF
-amloMentionsDf = pd.DataFrame(comment_dict)
-
-
+#amloMentionsDf = pd.DataFrame(comment_dict)
+wordCounterDf = pd.DataFrame(wordCounterDf)
+counterDataFrameColumns = ['word', "counter"]
 
 #Create a regex object to look for any mention of amlo
 patternToLookFor = re.compile('amlo', re.IGNORECASE)
@@ -59,7 +61,15 @@ for comment in subrList[0].stream.comments():
 					#print (Counter(word))
 					#Now to create the dataFrame that holds the count itself
 					counterDataFrame = pd.DataFrame.from_dict(Counter(word), orient='index').reset_index()
-				print(counterDataFrame.head())
+					counterDataFrame.columns = counterDataFrameColumns
+				#print(counterDataFrame)
+				
+				#Appending to global wordCounterDf
+				wordCounterDf.append(counterDataFrame)
+				
+				#Convert to CSV file
+				#wordCounterDf.to_csv(sep=" ")
+				print(wordCounterDf.head())
 
 				#print(splittedWordsDf)
 				#print(type(splittedWordsDf))
