@@ -1,6 +1,5 @@
 #! usr/bin/env python3
 import praw
-import sys
 import pandas as pd
 from datetime import datetime
 import pprint
@@ -9,6 +8,7 @@ import re
 from credentials import redditPersonalUseID, redditSecretKey, redditAppName, redditUserName, redditPassword
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 """
 TODO
@@ -59,15 +59,20 @@ class streamComments(object):
 			wordCounterDf = pd.DataFrame(wordCounterDf)
 			counterDataFrameColumns = ['word', "counter"]
 
+			###Regex object creation###
 			#Create a regex object to look for any mention of amlo
 			patternToLookFor = re.compile('hi', re.IGNORECASE)
+			
+			
 			for comment in subrList[0].stream.comments():
 				try:
 					#print (comment.body)
 					if len(comment.body) > 0:
 						if re.search(patternToLookFor, comment.body):
 							print('found an amlo')
-							#print(comment.body)
+							#Eliminate all non alphanumerical characters from the message 
+							re.sub(r'\W+', '', comment.body)
+							print(comment.body)
 							parent_id = str(comment.parent())
 							original = reddit.comment(parent_id)
 							comment_dict["parent_id"].append(str(comment.parent()))
@@ -82,13 +87,21 @@ class streamComments(object):
 								counterDataFrame = pd.DataFrame.from_dict(Counter(word), orient='index').reset_index()
 								counterDataFrame.columns = counterDataFrameColumns
 								print(counterDataFrame.head())
-								with open(self.counterFileName, 'a') as f:
-								    counterDataFrame.to_csv(f,  sep='\t', encoding='utf-8')
+								#try:
+								#	if os.path.exists(self.counterFileName):
+								#		with open(self.counterFileName, 'a') as f:
+								#			print('Append mode')
+								#			counterDataFrame.to_csv(self.counterFileName, header=False,  sep='\t', encoding='utf-8', index=False)
+								#	else:
+								#		print ('First time mode')
+								#		counterDataFrame.to_csv(self.counterFileName, sep='\t', encoding='utf-8', index=False)
+								#except IOError as err:
+								#	print(err)	
+								#except Exception as e:
+								#	print(e)							
 							#print(counterDataFrame)
 							
 							#Appending to global wordCounterDf
-							wordCounterDf.append(counterDataFrame)
-							
 							#Convert to CSV file
 							#wordCounterDf.to_csv(sep=" ")
 							#print(wordCounterDf.head())
