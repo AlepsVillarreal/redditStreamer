@@ -37,7 +37,7 @@ class streamComments(object):
 								password=self.redditPassword)
 
 			#Subreddits to analyze
-			sourceData = ['OnePiece']
+			sourceData = ['mexico']
 
 			#Create a list that holds subreddit objects from sourceData
 			subrList=[]
@@ -61,7 +61,7 @@ class streamComments(object):
 
 			###Regex object creation###
 			#Create a regex object to look for any mention of amlo
-			patternToLookFor = re.compile('hi', re.IGNORECASE)
+			patternToLookFor = re.compile('amlo', re.IGNORECASE)
 			
 			
 			for comment in subrList[0].stream.comments():
@@ -87,18 +87,19 @@ class streamComments(object):
 								counterDataFrame = pd.DataFrame.from_dict(Counter(word), orient='index').reset_index()
 								counterDataFrame.columns = counterDataFrameColumns
 								print(counterDataFrame.head())
-								#try:
-								#	if os.path.exists(self.counterFileName):
-								#		with open(self.counterFileName, 'a') as f:
-								#			print('Append mode')
-								#			counterDataFrame.to_csv(self.counterFileName, header=False,  sep='\t', encoding='utf-8', index=False)
-								#	else:
-								#		print ('First time mode')
-								#		counterDataFrame.to_csv(self.counterFileName, sep='\t', encoding='utf-8', index=False)
-								#except IOError as err:
-								#	print(err)	
-								#except Exception as e:
-								#	print(e)							
+								try:
+									if os.path.exists(self.counterFileName):
+										with open(self.counterFileName, 'a') as f:
+											print('Append mode')
+											counterDataFrame.to_csv(f, header=False,  sep='\t', encoding='utf-8', index=False)
+									else:
+										print ('First time mode')
+										with open(self.counterFileName, 'a') as f:
+											counterDataFrame.to_csv(f, sep='\t', encoding='utf-8', index=False)
+								except IOError as err:
+									print(err)	
+								except Exception as e:
+									print(e)							
 							#print(counterDataFrame)
 							
 							#Appending to global wordCounterDf
