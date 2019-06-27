@@ -18,6 +18,7 @@ TODO
 4. #In another script, create a program to read the localFile.txt into a dataframe and then use wordcloud library to plot
 """
 #Only 30 api calls per minute
+
 class streamComments(object):
 	def __init__(self, clientID, clientSecret, userAgent, personalUserName, personalPassword):
 		self.redditPersonalUseID = clientID
@@ -37,7 +38,7 @@ class streamComments(object):
 								password=self.redditPassword)
 
 			#Subreddits to analyze
-			sourceData = ['mexico']
+			sourceData = ['onepiece']
 
 			#Create a list that holds subreddit objects from sourceData
 			subrList=[]
@@ -61,7 +62,7 @@ class streamComments(object):
 
 			###Regex object creation###
 			#Create a regex object to look for any mention of amlo
-			patternToLookFor = re.compile('amlo', re.IGNORECASE)
+			patternToLookFor = re.compile('luffy', re.IGNORECASE)
 			
 			
 			for comment in subrList[0].stream.comments():
@@ -91,11 +92,11 @@ class streamComments(object):
 									if os.path.exists(self.counterFileName):
 										with open(self.counterFileName, 'a') as f:
 											print('Append mode')
-											counterDataFrame.to_csv(f, header=False,  sep='\t', encoding='utf-8', index=False)
+											counterDataFrame.to_csv(f, header=False,  sep=',', encoding='ISO-8859-1', index=False)
 									else:
 										print ('First time mode')
 										with open(self.counterFileName, 'a') as f:
-											counterDataFrame.to_csv(f, sep='\t', encoding='utf-8', index=False)
+											counterDataFrame.to_csv(f, sep=',', encoding='ISO-8859-1', index=False)
 								except IOError as err:
 									print(err)	
 								except Exception as e:
